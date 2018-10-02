@@ -6,9 +6,13 @@ New branch set up
 =======
 I am new 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
  my br da ji
 >>>>>>> parent of 90642cc... add 111
 >>>>>>> parent of 51add46... New mission
 =======
 >>>>>>> parent of 8238049... new branch
+=======
+ my br
+>>>>>>> parent of b5769c2... Revert "make 7 try"
