@@ -1,5 +1,2 @@
-I am new 
-<<<<<<< HEAD
-=======
- my br da ji
->>>>>>> parent of 90642cc... add 111
+New mission
+
