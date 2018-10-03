@@ -1,4 +1,2 @@
 Hello Magic
 version 1
-version 2
-Version 3
