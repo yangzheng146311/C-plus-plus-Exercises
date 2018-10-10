@@ -23,17 +23,8 @@ public:
 
 	~node()
 	{
-		if (left != NULL)
-		{
-			delete left;
-			left = NULL;
-		}
-
-		if (right != NULL)
-		{
-			delete left;
-			right = NULL;
-		}
+		cout << "Value->" << value << "  node delete" << endl;
+		
 
      }
 
@@ -59,15 +50,68 @@ public:
 	
 			cout << "wrong input";
 			return false;
-		
+	}
+
+	void delete_interger(node *_Node)
+	{
+		if (_Node->left != NULL)
+		{
+			delete(_Node);
+
+
+		}
+
+		else
+			return;
 
 
 	}
 
-	void print_tree(node )
-	{
 
+public :void print_tree()
+	{
+		this->Depth_First_Search();
 		cout << endl;
+
+	}
+
+    void  Depth_First_Search()
+	{
+		if (this != NULL)
+		{
+			 cout <<this->value<<"\t";
+			 this->left->Depth_First_Search();
+			 this->right->Depth_First_Search();
+			 
+			
+		}
+
+		else
+		{
+
+			return;
+		}
+
+	}
+
+	void  delete_tree()
+	{
+		if (this->left != NULL)
+		{
+			this->left->delete_tree();
+		}
+		
+
+		if (this->right != NULL)
+		{
+			this->right->delete_tree();
+		}
+
+		delete this;
+		
+
+		
+		
 
 	}
 
