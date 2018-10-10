@@ -67,7 +67,7 @@ public:
 	void print_tree(node )
 	{
 
-
+		cout << endl;
 
 	}
 
