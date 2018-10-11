@@ -31,9 +31,46 @@ public:
     
 
 
-	bool insert_integer(node *newNode,int branch)
+	void insert_integer(node *newNode)
 	{
-		if (branch == Left)
+		if (newNode != NULL)
+		{
+			if (newNode->value < this->value)
+			{
+				if (this->left == NULL)
+				{
+					this->left = newNode;
+				}
+				else
+				{
+					this->left->insert_integer(newNode);
+				}
+			}
+
+			else
+			{
+				if (this->right == NULL)
+				{
+					this->right = newNode;
+				}
+				else
+				{
+					this->right->insert_integer(newNode);
+				}
+			}
+
+		}
+
+		else
+		{
+			cout << "The node is NULL" << endl;
+		}
+
+		return;
+	}
+
+		
+		/*if (branch == Left)
 		{
 			left = newNode;
 			left->value = newNode->value;
@@ -49,24 +86,10 @@ public:
 
 	
 			cout << "wrong input";
-			return false;
-	}
+			return false;*/
+	
 
-	void delete_interger(node *_Node)
-	{
-		if (_Node->left != NULL)
-		{
-			delete(_Node);
-
-
-		}
-
-		else
-			return;
-
-
-	}
-
+	
 
 public :void print_tree()
 	{
