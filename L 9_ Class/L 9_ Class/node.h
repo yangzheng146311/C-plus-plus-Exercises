@@ -1,17 +1,21 @@
-#pragma once
+﻿#pragma once
 using namespace std;
 #include<iostream>
+#include<queue>
 enum MyEnum
 {
 	Left,Right
 };
+
 class  node
 {
 public:
 	int value;
 	node *left;
 	node *right;
+	static queue<node*> _queue;
 
+	
 	node(int _value)
 	{
 
@@ -89,9 +93,7 @@ public:
 			return false;*/
 	
 
-	
-
-public :void print_tree()
+	void print_tree()
 	{
 		this->Depth_First_Search();
 		cout << endl;
@@ -105,8 +107,7 @@ public :void print_tree()
 			 cout <<this->value<<"\t";
 			 this->left->Depth_First_Search();
 			 this->right->Depth_First_Search();
-			 
-			
+		
 		}
 
 		else
@@ -114,6 +115,22 @@ public :void print_tree()
 
 			return;
 		}
+
+	}
+
+	void Breadth_First()
+	{
+		_queue.push(this);
+
+		while (_queue.size()>0)
+		{
+			if(_queue.front()->left!=NULL) _queue.push(_queue.front()->left);
+			
+			if (_queue.front()->right != NULL) _queue.push(_queue.front()->right);
+			cout << _queue.front()->value<<"\t";
+			_queue.pop();
+		}
+		cout << endl;
 
 	}
 
@@ -130,14 +147,9 @@ public :void print_tree()
 			this->right->delete_tree();
 		}
 
-		delete this;
-		
-
-		
-		
+		delete this;	
 
 	}
-
-
-
 };
+
+queue<node*>  node::_queue = queue<node*>();
