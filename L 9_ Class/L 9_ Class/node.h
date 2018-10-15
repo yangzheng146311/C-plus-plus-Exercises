@@ -28,50 +28,14 @@ public:
 	~node()
 	{
 		cout << "Value->" << value << "  node delete" << endl;
-		
+		delete_tree();
 
      }
 
     
 
 
-	void insert_integer(node *newNode)
-	{
-		if (newNode != NULL)
-		{
-			if (newNode->value < this->value)
-			{
-				if (this->left == NULL)
-				{
-					this->left = newNode;
-				}
-				else
-				{
-					this->left->insert_integer(newNode);
-				}
-			}
-
-			else
-			{
-				if (this->right == NULL)
-				{
-					this->right = newNode;
-				}
-				else
-				{
-					this->right->insert_integer(newNode);
-				}
-			}
-
-		}
-
-		else
-		{
-			cout << "The node is NULL" << endl;
-		}
-
-		return;
-	}
+	void insert_integer(node *newNode);
 
 		
 		/*if (branch == Left)
@@ -153,17 +117,21 @@ public:
 		if (this->left != NULL)
 		{
 			this->left->delete_tree();
+			delete this->left;
+			this->left = NULL;
 		}
 		
 
 		if (this->right != NULL)
 		{
 			this->right->delete_tree();
+			delete this->right;
+			this->right = NULL;
 		}
 
-		delete this;	
+		// this;	
 
 	}
 };
 
-queue<node*>  node::_queue = queue<node*>();
+//queue<node*>  node::_queue = queue<node*>();
