@@ -95,8 +95,22 @@ public:
 
 	void print_tree()
 	{
-		this->Depth_First_Search();
-		cout << endl;
+		bool run = true;
+		int input = 0;
+		while (run)
+		{
+			cout << "Choose the menthod:press'1' for Depth First; press '2' for Breadth First;press '3' to exit.";
+			cin >> input;
+			switch (input)
+			{
+			case 1:this->Depth_First_Search(); break;
+			case 2:this->Breadth_First(); break;
+			case 3:run = false; break;
+			default:
+				break;
+			}
+			cout << endl;
+		}
 
 	}
 
