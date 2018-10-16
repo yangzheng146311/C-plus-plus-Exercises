@@ -17,21 +17,21 @@ CombLock::CombLock()
 	cout << "CN"<<id << " ";
 	for (int i = 0; i < 4; i++)
 	{
-		CN[i] = Move(ROOT[i], UHF[i]);
+		CN[i] = Turn(ROOT[i], UHF[i]);
 		cout << CN[i];
 	}
 	cout << "\t";
 	cout << "LN" << id << " ";
 	for (int i = 0; i < 4; i++)
 	{
-		LN[i] = Move(CN[i], LHF[i]);
+		LN[i] = Turn(CN[i], LHF[i]);
 		cout << LN[i];
 	}
 	cout << "\t";
 	cout << "HN" << id << " ";
 	for (int i = 0; i < 4; i++)
 	{
-		NH[i] = Move(LN[i], PHF[i]);
+		NH[i] = Turn(LN[i], PHF[i]);
 		cout << NH[i];
 	}
 	cout << endl;
@@ -43,21 +43,21 @@ CombLock::CombLock(const CombLock &comblock)
 	cout << "CN" << id << " ";
 	for (int i = 0; i < 4; i++)
 	{
-		CN[i] = Move(comblock.NH[i], UHF[i]);
+		CN[i] = Turn(comblock.NH[i], UHF[i]);
 		cout << CN[i];
 	}
 	cout << "\t";
 	cout << "LN" << id << " ";
 	for (int i = 0; i < 4; i++)
 	{
-		LN[i] = Move(CN[i], LHF[i]);
+		LN[i] = Turn(CN[i], LHF[i]);
 		cout << LN[i];
 	}
 	cout << "\t";
 	cout << "HN" << id << " ";
 	for (int i = 0; i < 4; i++)
 	{
-		NH[i] = Move(LN[i], PHF[i]);
+		NH[i] = Turn(LN[i], PHF[i]);
 		cout << NH[i];
 	}
 
@@ -75,7 +75,9 @@ void CombLock::Generate_ROOT()
 	{
 		
 		ROOT[i] = rand() % 10;
-		cout << ROOT[i];
+		
+		
+			cout << ROOT[i];
 	}
 	cout << endl;
 }
@@ -88,6 +90,7 @@ void CombLock::Generate_UHF()
 	{
 
 		UHF[i] = rand() % 18 - 9;
+		if (UHF[i] > 0) cout << "+";
 		cout << UHF[i]<<"\t";
 	}
 	cout << endl;
@@ -101,6 +104,7 @@ void CombLock::Generate_LHF()
 	{
 
 		LHF[i] = rand() % 18 - 9;
+		if (LHF[i] > 0) cout << "+";
 		cout << LHF[i] << "\t";
 	}
 	cout << endl;
@@ -114,6 +118,7 @@ void CombLock::Generate_PHF()
 	{
 
 		PHF[i] = rand() % 18 - 9;
+		if (PHF[i] > 0) cout << "+";
 		cout << PHF[i] << "\t";
 	}
 	cout << endl;
@@ -134,7 +139,7 @@ void CombLock::Build_SafeLock()
 	CombLock c5(c4);
 }
 
-int CombLock::Move(int x,int y) {
+int CombLock::Turn(int x,int y) {
 	if (x + y < 0) return x + y + 10;
     if (x + y > 9) return x + y - 10;
     return x + y;

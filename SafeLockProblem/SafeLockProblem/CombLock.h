@@ -21,7 +21,7 @@ public:
 	static void Generate_LHF();
 	static void Generate_PHF();
 	static void Build_SafeLock();
-	int Move(int x,int y);
+	int Turn(int x,int y);
 	
 	
 
