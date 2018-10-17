@@ -35,6 +35,8 @@ public:
 	CombLock();//First Lock Constructor
 	CombLock(const CombLock &comblock);//After Lock Constructor
 	~CombLock();
+
+	static void InitialisePesudoRandom();
 	static ofstream myfile;
 	static bool Build_SafeLock();
 	
