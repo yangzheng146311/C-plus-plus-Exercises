@@ -124,7 +124,7 @@ void CombLock::Generate_PHF()
 	cout << endl;
 }
 
-void CombLock::Build_SafeLock()
+bool CombLock::Build_SafeLock()
 {
 	CombLock::Generate_ROOT();
 	CombLock::Generate_UHF();
@@ -137,11 +137,38 @@ void CombLock::Build_SafeLock()
 	CombLock c3(c2);
 	CombLock c4(c3);
 	CombLock c5(c4);
+
+
+	if (!c1.CheckCN()) return false;
+	if (!c2.CheckCN()) return false;
+	if (!c3.CheckCN()) return false;
+	if (!c4.CheckCN()) return false;
+	if (!c5.CheckCN()) return false;
+
+	return true;
 }
 
 int CombLock::Turn(int x,int y) {
 	if (x + y < 0) return x + y + 10;
     if (x + y > 9) return x + y - 10;
     return x + y;
+
+}
+
+bool CombLock::CheckCN()
+{
+	for (int i=0; i<4 ;i++)
+	{
+		for (int j = i+1; j < 4;j++)
+		{
+			if (CN[i] == CN[j]) { cout << "UnMatched" << endl; return false; }
+		}
+	}
+
+
+	cout << "Matched" << endl;
+	return true;
+
+
 
 }

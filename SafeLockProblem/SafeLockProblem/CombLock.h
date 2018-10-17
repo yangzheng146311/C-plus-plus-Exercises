@@ -20,8 +20,9 @@ public:
 	static void Generate_UHF();
 	static void Generate_LHF();
 	static void Generate_PHF();
-	static void Build_SafeLock();
+	static bool Build_SafeLock();
 	int Turn(int x,int y);
+	bool CheckCN();
 	
 	
 
