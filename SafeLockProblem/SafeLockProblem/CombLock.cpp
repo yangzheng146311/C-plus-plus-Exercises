@@ -176,8 +176,10 @@ bool CombLock::Build_SafeLock()
 	CombLock c5(c4); CombVector[4] = c5;
 
 	
-	if (!CheckAllCN()) return false;
+	if (!CheckAllCN())  return false;
+	if (!CheckSum())    return false;
 	if (!CheckEven())   return false;
+	
 
 	
 	return true;
@@ -271,11 +273,13 @@ bool CombLock::CheckSum()
 	for (auto it = CombVector.begin(); it < CombVector.end()-1; it++)
 	{
 		
-		if ((it->CN_Sum() >=(it + 1)->CN_Sum())|| (it->LN_Sum() >= (it + 1)->LN_Sum())|| (it->HN_Sum() >= (it + 1)->HN_Sum())) {
-			myfile << "Sum UnMatched" << endl;
+		if ((it->CN_Sum() >=(it + 1)->CN_Sum()))
+		{
+			myfile << "CN_Sum_Less UnMatched" << endl;
 			return false;
 		}
 	}
+	myfile << "CN_Sum_Less Matched" << endl;
 	return true;
 }
 
@@ -288,6 +292,7 @@ bool CombLock::CheckEven()
 	}
 	myfile << "sum ="<<sum << endl;
 	if (sum % 2 != 0) return false;
-
+	
+	myfile << " Sum Even Matched" << endl;
 	return true;
 }
