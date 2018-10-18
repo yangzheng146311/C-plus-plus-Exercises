@@ -13,74 +13,44 @@ int CombLock::PHF[4] = { 0,0,0,0 };
 CombLock::CombLock()
 {
 	id = 0;
-	//cout << "CN"<<id << " ";
-	myfile<< "CN" << id << " ";
 	for (int i = 0; i < 4; i++)
 	{
 		CN[i] = Turn(ROOT[i], UHF[i]);
-		//cout << CN[i];
-		myfile << CN[i];
+
 	}
-	//cout << "\t";
-	myfile<< "\t";
-	//cout << "LN" << id << " ";
-	myfile << "LN" << id << " ";
 	for (int i = 0; i < 4; i++)
 	{
 		LN[i] = Turn(CN[i], LHF[i]);
-		//cout << LN[i];
-		myfile << LN[i];
+
 	}
-	//cout << "\t";
-	myfile << "\t";
-	//cout << "HN" << id << " ";
-	myfile << "HN" << id << " ";
 	for (int i = 0; i < 4; i++)
 	{
 		HN[i] = Turn(LN[i], PHF[i]);
-		//cout << NH[i];
-		myfile << HN[i];
-	}
-	//cout << endl;
-	myfile << endl;
 
+	}
 	
 }
 
 CombLock::CombLock(const CombLock &comblock)
 {
 	id = comblock.id + 1;
-	//cout << "CN" << id << " ";
-	myfile << "CN" << id << " ";
 	for (int i = 0; i < 4; i++)
 	{
 		CN[i] = Turn(comblock.HN[i], UHF[i]);
-		//cout << CN[i];
-		myfile << CN[i];
+		
 	}
-	//cout << "\t";
-	myfile << "\t";
-	//cout << "LN" << id << " ";
-	myfile << "LN" << id << " ";
+
 	for (int i = 0; i < 4; i++)
 	{
 		LN[i] = Turn(CN[i], LHF[i]);
-		//cout << LN[i];
-		myfile << LN[i];
+	
 	}
-	//cout << "\t";
-	myfile << "\t";
-	//cout << "HN" << id << " ";
-	myfile << "HN" << id << " ";
+	
 	for (int i = 0; i < 4; i++)
 	{
 		HN[i] = Turn(LN[i], PHF[i]);
-		//cout << NH[i];
-		myfile << HN[i];
+	
 	}
-
-	//cout << endl;
-	myfile << endl;
 
 }
 
@@ -94,76 +64,55 @@ void CombLock::InitialisePesudoRandom()
 
 void CombLock::Generate_ROOT()
 {
-	//cout << "ROOT\t";
-	myfile << "ROOT\t";
+	
 	for (int i = 0; i < 4; i++)
 	{
 		
 		ROOT[i] = rand() % 10;
 		
-		
-			//cout << ROOT[i];
-			myfile << ROOT[i];
 	}
-	//cout << endl;
-	myfile << endl;
+
 }
 
 void CombLock::Generate_UHF()
 {
-	//cout << "UHF\t";
-	myfile << "UHF\t";
+	
 	for (int i = 0; i < 4; i++)
 	{
 
 		UHF[i] = rand() % 18 - 9;
-		if (UHF[i] > 0) { //cout << "+"; 
-			myfile << "+"; }
-		//cout << UHF[i]<<"\t";
-		myfile << UHF[i] << "\t";
+	
 	}
-	//cout << endl;
-	myfile << endl;
+
 }
 
 void CombLock::Generate_LHF()
 {
-	//cout << "LHF\t";
-	myfile << "LHF\t";
+	
 	for (int i = 0; i < 4; i++)
 	{
 
 		LHF[i] = rand() % 18 - 9;
-		if (LHF[i] > 0) { //cout << "+"; 
-			myfile << "+"; }
-		//cout << LHF[i] << "\t";
-		myfile<< LHF[i] << "\t";
+	
 	}
-	//cout << endl;
-	myfile << endl;
+	
 }
 
 void CombLock::Generate_PHF()
 {
-	//cout << "PHF\t";
-	myfile << "PHF\t";
+	
 	for (int i = 0; i < 4; i++)
 	{
 
 		PHF[i] = rand() % 18 - 9;
-		if (PHF[i] > 0) { //cout << "+";
-			myfile << "+"; }
-		//cout << PHF[i] << "\t";
-		myfile << PHF[i] << "\t";
+		
 	}
-	//cout << endl;
-	myfile << endl;
+	
 }
 
 bool CombLock::Build_SafeLock()
 {
 	
-
 	CombLock::Generate_ROOT();
 	CombLock::Generate_UHF();
 	CombLock::Generate_LHF();
@@ -176,13 +125,117 @@ bool CombLock::Build_SafeLock()
 	CombLock c5(c4); CombVector[4] = c5;
 
 	
+	
 	if (!CheckAllCN())  return false;
 	if (!CheckSum())    return false;
 	if (!CheckEven())   return false;
 	
 
-	
+	DataStruture();
 	return true;
+}
+
+void CombLock::TimesLimitVaildOutput(int times)
+{
+	for (int i = 1; i <= times; i++)
+	{
+		if (!CombLock::Build_SafeLock())
+		{
+			std::cout << "This is the " << i << "  times" << std::endl;
+			//CombLock::myfile << "This is the " << i << "times" << std::endl;
+		}
+
+		else
+		{
+			std::cout << "This is the " << i << "  times" << std::endl;
+			//CombLock::myfile << "This is the " << i << "times" << std::endl;
+			return;
+		}
+	}
+		
+		std::cout << "Solution not found in "<<times<<"times" << std::endl;
+		CombLock::myfile << "Solution not found in " << times << " times" << std::endl;
+
+}
+
+void CombLock::StopUntilOutputOneVaild()
+{
+	int i = 0;
+	while (!CombLock::Build_SafeLock())
+	{
+
+		i++;
+		std::cout << "This is the " << i << "  times" << std::endl;
+		//CombLock::myfile << "This is the " << i << " times" << std::endl;
+
+	}
+	
+}
+
+void CombLock::DataStruture()
+{
+	myfile << "ROOT\t";
+	for (int i = 0; i < 4; i++)
+	{
+		myfile << ROOT[i];
+	}
+	myfile << endl;
+
+	myfile << "UHF\t";
+	for (int i = 0; i < 4; i++)
+	{
+		if (UHF[i] > 0) { 
+			myfile << "+";
+		}
+		myfile << UHF[i] << "\t";
+	}
+	myfile << endl;
+
+	myfile << "LHF\t";
+	for (int i = 0; i < 4; i++)
+	{
+		if (LHF[i] > 0) { 
+			myfile << "+";
+		}
+		myfile << LHF[i] << "\t";
+	}
+	myfile << endl;
+
+	myfile << "PHF\t";
+	for (int i = 0; i < 4; i++)
+	{
+		if (PHF[i] > 0) { 
+			myfile << "+";
+		}
+		myfile << PHF[i] << "\t";
+	}
+	myfile << endl;
+
+	for (auto it = CombVector.begin(); it < CombVector.end(); it++)
+	{
+		myfile <<"CN"<<it->id << "  ";
+		for (int i = 0; i < 4; i++)
+		{
+			myfile << it->CN[i];
+		}
+		myfile << "\t";
+
+		myfile << "LN" << it->id << "  ";
+		for (int i = 0; i < 4; i++)
+		{
+			myfile << it->LN[i];
+		}
+		myfile << "\t";
+
+		myfile << "HN" << it->id << "  ";
+		for (int i = 0; i < 4; i++)
+		{
+			myfile << it->HN[i];
+		}
+		myfile << endl;
+	}
+
+
 }
 
 int CombLock::Turn(int x,int y) {
@@ -203,14 +256,15 @@ bool CombLock::CheckCN()
 	{
 		for (int j = i+1; j < 4;j++)
 		{
-			if (CN[i] == CN[j]) { //cout << "UnMatched" << endl;
-				myfile << "CN UnMatched" << endl; return false; }
+			if (CN[i] == CN[j]) { 
+				//myfile << "CN UnMatched" << endl; 
+				return false; }
 		}
 	}
 
 
 	//cout << "Matched" << endl;
-	myfile << "CN Matched" << endl;
+	//myfile << "CN Matched" << endl;
 	return true;
 
 
@@ -275,11 +329,11 @@ bool CombLock::CheckSum()
 		
 		if ((it->CN_Sum() >=(it + 1)->CN_Sum()))
 		{
-			myfile << "CN_Sum_Less UnMatched" << endl;
+			//myfile << "CN_Sum_Less UnMatched" << endl;
 			return false;
 		}
 	}
-	myfile << "CN_Sum_Less Matched" << endl;
+	//myfile << "CN_Sum_Less Matched" << endl;
 	return true;
 }
 
@@ -290,9 +344,9 @@ bool CombLock::CheckEven()
 	{
 		sum += it->CLHN_Sum();
 	}
-	myfile << "sum ="<<sum << endl;
+	//myfile << "sum ="<<sum << endl;
 	if (sum % 2 != 0) return false;
 	
-	myfile << " Sum Even Matched" << endl;
+	//myfile << " Sum Even Matched" << endl;
 	return true;
 }

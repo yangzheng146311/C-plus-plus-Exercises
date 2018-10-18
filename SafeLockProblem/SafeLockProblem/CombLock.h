@@ -30,9 +30,14 @@ private:
 	static void Generate_UHF();
 	static void Generate_LHF();
 	static void Generate_PHF();
+	static bool CheckSum();//Check each digit in a CN is same or not
+	static bool CheckAllCN();//Check if all the combination locks satisfy the rule
+	static bool CheckEven();//Check 
+	static void DataStruture();
 
 public:
-	static ofstream myfile;
+	static ofstream myfile;//
+	static ofstream myfile_;
 	static vector<CombLock> CombVector;
 	CombLock();//First Lock Constructor
 	CombLock(const CombLock &comblock);//After Lock Constructor
@@ -43,8 +48,9 @@ public:
 	int  CLHN_Sum();
 	static void InitialisePesudoRandom();
 	static bool Build_SafeLock();
-	static bool CheckSum();
-	static bool CheckAllCN();
-	static bool CheckEven();
+	static void TimesLimitVaildOutput(int times);
+	static void StopUntilOutputOneVaild();
+	
+	
 	
 };
