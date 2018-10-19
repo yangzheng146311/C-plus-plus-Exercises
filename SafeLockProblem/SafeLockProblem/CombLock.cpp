@@ -57,9 +57,10 @@ CombLock::CombLock(const CombLock &comblock)
 CombLock::~CombLock() {
 }
 
-void CombLock::InitialisePesudoRandom()
+void CombLock::Initialise()
 {
 	srand(time(0));
+	
 }
 
 void CombLock::Generate_ROOT()
@@ -124,14 +125,14 @@ bool CombLock::Build_SafeLock()
 	CombLock c4(c3); CombVector[3] = c4;
 	CombLock c5(c4); CombVector[4] = c5;
 
-	
+	DataStruture();
 	
 	if (!CheckAllCN())  return false;
 	if (!CheckSum())    return false;
 	if (!CheckEven())   return false;
-	
 
-	DataStruture();
+
+	
 	return true;
 }
 
@@ -158,76 +159,93 @@ void CombLock::TimesLimitVaildOutput(int times)
 
 }
 
-void CombLock::StopUntilOutputOneVaild()
+void CombLock::StopUntilOutputOneVaild(int soluNum)
 {
 	int i = 0;
-	while (!CombLock::Build_SafeLock())
+	for (int t=1; t <=soluNum; t++)
 	{
+		
+		while (!CombLock::Build_SafeLock())
+		{
 
-		i++;
-		std::cout << "This is the " << i << "  times" << std::endl;
-		//CombLock::myfile << "This is the " << i << " times" << std::endl;
+			i++;
+			std::cout << "This is the " << i << "  times" << std::endl;
+			//CombLock::myfile << "This is the " << i << " times" << std::endl;
 
+		}
+
+		
+		
+		
+		
 	}
+	
 	
 }
 
 void CombLock::DataStruture()
 {
-	myfile << "ROOT\t";
+	myfile << "ROOT ";
 	for (int i = 0; i < 4; i++)
 	{
 		myfile << ROOT[i];
 	}
 	myfile << endl;
 
-	myfile << "UHF\t";
+	myfile << "UHF ";
 	for (int i = 0; i < 4; i++)
 	{
 		if (UHF[i] > 0) { 
 			myfile << "+";
 		}
-		myfile << UHF[i] << "\t";
+		
+		myfile << UHF[i];
+		if (i != 3) myfile << ",";
+			
 	}
 	myfile << endl;
 
-	myfile << "LHF\t";
+	myfile << "LHF ";
 	for (int i = 0; i < 4; i++)
 	{
 		if (LHF[i] > 0) { 
 			myfile << "+";
 		}
-		myfile << LHF[i] << "\t";
+		
+		myfile << LHF[i];
+		if (i != 3) myfile << ",";
 	}
 	myfile << endl;
 
-	myfile << "PHF\t";
+	myfile << "PHF ";
 	for (int i = 0; i < 4; i++)
 	{
 		if (PHF[i] > 0) { 
 			myfile << "+";
 		}
-		myfile << PHF[i] << "\t";
+	
+		myfile << PHF[i];
+		if (i != 3) myfile << ",";
 	}
 	myfile << endl;
 
 	for (auto it = CombVector.begin(); it < CombVector.end(); it++)
 	{
-		myfile <<"CN"<<it->id << "  ";
+		myfile <<"CN"<<it->id << " ";
 		for (int i = 0; i < 4; i++)
 		{
 			myfile << it->CN[i];
 		}
-		myfile << "\t";
+		myfile << ",";
 
-		myfile << "LN" << it->id << "  ";
+		myfile << "LN" << it->id << " ";
 		for (int i = 0; i < 4; i++)
 		{
 			myfile << it->LN[i];
 		}
-		myfile << "\t";
+		myfile << ",";
 
-		myfile << "HN" << it->id << "  ";
+		myfile << "HN" << it->id << " ";
 		for (int i = 0; i < 4; i++)
 		{
 			myfile << it->HN[i];
@@ -235,7 +253,7 @@ void CombLock::DataStruture()
 		myfile << endl;
 	}
 
-
+	myfile << endl;
 }
 
 int CombLock::Turn(int x,int y) {

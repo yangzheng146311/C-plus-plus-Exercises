@@ -26,6 +26,7 @@ private:
 	int Turn(int x, int y);
 	int  Generate_Number(int num[]);
 	bool CheckCN();
+	
 	static void Generate_ROOT();
 	static void Generate_UHF();
 	static void Generate_LHF();
@@ -36,6 +37,7 @@ private:
 	static void DataStruture();
 
 public:
+	
 	static ofstream myfile;//
 	static ofstream myfile_;
 	static vector<CombLock> CombVector;
@@ -46,10 +48,11 @@ public:
 	int  LN_Sum();
 	int  HN_Sum();
 	int  CLHN_Sum();
-	static void InitialisePesudoRandom();
+	static void Initialise();
 	static bool Build_SafeLock();
 	static void TimesLimitVaildOutput(int times);
-	static void StopUntilOutputOneVaild();
+	static void StopUntilOutputOneVaild(int soluNum);
+    
 	
 	
 	
