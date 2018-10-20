@@ -1,1 +1,4 @@
-Solution not found in 1000 times
+ROOT 8879
+UHF -4,-5,-7,+8
+LHF +1,+7,+5,+5
+PHF -1,-8,+1,-9
