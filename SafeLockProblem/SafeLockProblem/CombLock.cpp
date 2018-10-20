@@ -191,14 +191,46 @@ void CombLock::ReadKeyFile(string filename)
 			if (str.length() > 0)
 			{
 				vector<string> v = String_Split(str, ' ');
+				vector<string> v1 = String_Split(v[1], ',');
+				for (int i = 0; i < 4; i++)
+				{
+					if (v[0] == "ROOT")
+					{
+						
+						ROOT[i]= atoi(&v[1][i]);
+						
+						cout << ROOT[i];
+
+					}
+
+					/*if (v[0] == "UHF")
+					{
+
+						ROOT[i] = atoi(&v[1][i]);
+						cout << UHF[i];
+					}
+
+					if (v[0] == "LHF")
+					{
+						ROOT[i] = atoi(&v[1][i]);
+						cout << LHF[i];
+					}
+
+					if (v[0] == "PHF")
+					{
+
+						ROOT[i] = atoi(&v[1][i]);
+						cout << PHF[i];
+					}*/
+
+				}
+				
 
 
 
 
-
-
-				vector<string> v1= String_Split(v[1], ',');
-				for (auto t : v1) cout << t;
+				
+				
 				cout << endl;
 			}
 		
