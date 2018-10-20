@@ -186,10 +186,23 @@ void CombLock::ReadKeyFile(string filename)
 	while (!CombLock::myfile_f.eof())
 
 	{
-		getline(CombLock::myfile_f, str);
-		index_space=str.find(" ");
-		cout << str <<endl;
-		cout << index_space << endl;
+		
+			getline(CombLock::myfile_f, str);
+			if (str.length() > 0)
+			{
+				vector<string> v = String_Split(str, ' ');
+
+
+
+
+
+
+				vector<string> v1= String_Split(v[1], ',');
+				for (auto t : v1) cout << t;
+				cout << endl;
+			}
+		
+		
 	}
 	CombLock::myfile_f.close();
 }
@@ -219,11 +232,11 @@ void CombLock::DataStruture()
 	myfile_o << "UHF ";
 	for (int i = 0; i < 4; i++)
 	{
-		if (UHF[i] > 0) { 
+		/*if (UHF[i] > 0) { 
 			myfile_o << "+";
-		}
+		}*/
 		
-		myfile_o << UHF[i];
+		myfile_o << std::showpos<< UHF[i];
 		if (i != 3) myfile_o << ",";
 			
 	}
@@ -232,9 +245,9 @@ void CombLock::DataStruture()
 	myfile_o << "LHF ";
 	for (int i = 0; i < 4; i++)
 	{
-		if (LHF[i] > 0) { 
+		/*if (LHF[i] > 0) { 
 			myfile_o << "+";
-		}
+		}*/
 		
 		myfile_o << LHF[i];
 		if (i != 3) myfile_o << ",";
@@ -244,40 +257,64 @@ void CombLock::DataStruture()
 	myfile_o << "PHF ";
 	for (int i = 0; i < 4; i++)
 	{
-		if (PHF[i] > 0) { 
+		/*if (PHF[i] > 0) { 
 			myfile_o << "+";
-		}
+		}*/
 	
-		myfile_o << PHF[i];
+		myfile_o <<PHF[i];
 		if (i != 3) myfile_o << ",";
 	}
-	myfile_o << endl;
+	myfile_o << std::noshowpos << endl;
 
-	for (auto it = CombVector.begin(); it < CombVector.end(); it++)
+	/*for (auto it = CombVector.begin(); it < CombVector.end(); it++)
 	{
 		myfile_o <<"CN"<<it->id << " ";
 		for (int i = 0; i < 4; i++)
 		{
-			myfile_o << it->CN[i];
+			myfile_o  << it->CN[i];
 		}
 		myfile_o << ",";
 
 		myfile_o << "LN" << it->id << " ";
 		for (int i = 0; i < 4; i++)
 		{
-			myfile_o << it->LN[i];
+			myfile_o  << it->LN[i];
 		}
 		myfile_o << ",";
 
 		myfile_o << "HN" << it->id << " ";
 		for (int i = 0; i < 4; i++)
 		{
-			myfile_o << it->HN[i];
+			myfile_o  << it->HN[i];
 		}
 		myfile_o << endl;
 	}
 
-	myfile_o << endl;
+	myfile_o << endl;*/
+}
+
+vector<string> CombLock::String_Split(const string& s, const char& c)
+{
+	string buff = "";
+	vector<string> v;
+	for (auto t : s)
+	{
+		if (t != c)
+		{
+			buff += t;
+		}
+
+		else if(buff!="")
+		{
+			v.push_back(buff);
+			buff = "";
+		}
+	}
+
+	if (buff != "")
+		v.push_back(buff);
+
+	return v;
 }
 
 int CombLock::Turn(int x,int y) {

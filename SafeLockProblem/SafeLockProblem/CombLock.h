@@ -36,6 +36,8 @@ private:
 	static bool CheckAllCN();//Check if all the combination locks satisfy the rule
 	static bool CheckEven();//Check 
 	static void DataStruture();
+	static vector<string> String_Split(const string& s, const char& c);
+	
 
 public:
 	static ofstream myfile_o;
@@ -54,7 +56,7 @@ public:
 	static void StopUntilOutputOneVaild(int soluNum);
 	static void ReadKeyFile(string filename);
 	static void WriteKeyFile(string filename);
-    
+	
 	
 	
 	
