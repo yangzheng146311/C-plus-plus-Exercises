@@ -338,55 +338,61 @@ void CombLock::DataStruture()
 	myfile_o << endl;*/
 }
 
-void CombLock::DataStruture_CLHN_Only()
+void CombLock::DataStruture_CLHN_Only(string check_result)
 {
-
+	//cout << check_result << endl;
+	myfile_o << check_result << endl;
 
 	for (auto it = CombVector.begin(); it < CombVector.end(); it++)
 	{
 		myfile_o << "CN" << it->id << " ";
-		cout<< "CN" << it->id << " ";
+		//cout<< "CN" << it->id << " ";
 		for (int i = 0; i < 4; i++)
 		{
 			myfile_o << it->CN[i];
-			cout << it->CN[i];
+			//cout << it->CN[i];
 		}
 		myfile_o << ",";
-		cout << ",";
+		//cout << ",";
 
 		myfile_o << "LN" << it->id << " ";
-		cout<< "LN" << it->id << " ";
+		//cout<< "LN" << it->id << " ";
 		for (int i = 0; i < 4; i++)
 		{
 			myfile_o << it->LN[i];
-			cout<< it->LN[i];
+			//cout<< it->LN[i];
 		}
 		myfile_o << ",";
-		cout<< ",";
+		//cout<< ",";
 
 		myfile_o << "HN" << it->id << " ";
-		cout << "HN" << it->id << " ";
+		//cout << "HN" << it->id << " ";
 		for (int i = 0; i < 4; i++)
 		{
 			myfile_o << it->HN[i];
-			cout << it->HN[i];
+			//cout << it->HN[i];
 		}
 		myfile_o << endl;
-		cout << endl;
+		//cout << endl;
 	}
 	myfile_o << endl;
-	cout << endl;
+	//cout << endl;
 }
 
 void CombLock::DecodeROOT()
 {
+	string check_result = "";
 	CombLock c1; CombVector[0] = c1;
 	CombLock c2(c1); CombVector[1] = c2;
 	CombLock c3(c2); CombVector[2] = c3;
 	CombLock c4(c3); CombVector[3] = c4;
 	CombLock c5(c4); CombVector[4] = c5;
 
-	DataStruture_CLHN_Only();
+	if (!CheckAllCN() || !CheckSum() || !CheckEven())  check_result = "NOT VALID";
+	else	check_result = "VALID";
+	
+
+	DataStruture_CLHN_Only(check_result);
 }
 
 vector<string> CombLock::String_Split(const string& s, const char& c)
