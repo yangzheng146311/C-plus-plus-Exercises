@@ -139,6 +139,7 @@ bool CombLock::Build_SafeLock()
 
 void CombLock::TimesLimitVaildOutput(int times)
 {
+	bool ifFound = false;
 	for (int i = 1; i <= times; i++)
 	{
 		if (!CombLock::Build_SafeLock())
@@ -146,21 +147,18 @@ void CombLock::TimesLimitVaildOutput(int times)
 			std::cout << "This is the " << i << "  times" << std::endl;
 			//CombLock::myfile_o << "This is the " << i << "times" << std::endl;
 		}
-
 		else
-		{
-			std::cout << "This is the " << i << "  times" << std::endl;
-			//CombLock::myfile_o << "This is the " << i << "times" << std::endl;
-			return;
-		}
+			ifFound = true;
 	}
-		
-		std::cout << "Solution not found in "<<times<<"times" << std::endl;
+	if (!ifFound)
+	{
+		std::cout << "Solution not found in " << times << "times" << std::endl;
 		CombLock::myfile_o << "Solution not found in " << times << " times" << std::endl;
+	}
 
 }
 
-void CombLock::StopUntilOutputOneVaild(int soluNum)
+void CombLock::StopUntilOutputEnoughVaild(int soluNum)
 {
 	int i = 0;
 	for (int t=1; t <=soluNum; t++)
@@ -184,12 +182,14 @@ void CombLock::ReadKeyFile(string filename,string output_filename)
 	CombLock::myfile_o.open(output_filename, std::ofstream::out);
 	string str;
 	char buff_c;
+	bool ifoutput = false;
 	while (!CombLock::myfile_f.eof())
 
 	{
 	  getline(CombLock::myfile_f, str);
 	   if (str.length() > 0)
 			{
+		        ifoutput = false;
 			    vector<string> v = String_Split(str, ' ');
 			
 				if (v[0] == "ROOT")
@@ -213,22 +213,53 @@ void CombLock::ReadKeyFile(string filename,string output_filename)
 				 }
 				}					
 		}
+	   else
+		   if (ifoutput == false)
+		   {
+			   DecodeROOT();
+			   ifoutput = true;
+		   }
+
 	}
 
 	CombLock::myfile_f.close();
-	DecodeROOT();
+
 	CombLock::myfile_o.close();
 
 }
 
 void CombLock::WriteKeyFile(string filename)
 {
+	int op = -1;
+	int times = -1;
+	int num = -1;
 	CombLock::Initialise();
 
 	CombLock::myfile_o.open(filename, std::ofstream::out);
 
-	CombLock::StopUntilOutputOneVaild(1);
-	//CombLock::TimesLimitVaildOutput(1000);
+	cout << "Please select modes" << endl;
+	cout << "Press '1':Generate keys  in limited times" << endl;
+	cout << "Press '2':Generate keys with referred number"<< endl;
+
+	cin >> op;
+
+	switch (op)
+	{
+	case 1:
+		
+		cout << "Please input the times limited:" << endl;
+		cin >> times;
+		CombLock::TimesLimitVaildOutput(times);
+		break;
+
+	case 2:
+		
+		cout << "Please input referred number of keys" << endl;
+		cin >> num;
+		CombLock::StopUntilOutputEnoughVaild(num);
+	default:
+		break;
+	}
 
 	CombLock::myfile_o.close();
 
@@ -278,7 +309,7 @@ void CombLock::DataStruture()
 		myfile_o <<PHF[i];
 		if (i != 3) myfile_o << ",";
 	}
-	myfile_o << std::noshowpos << endl;
+	myfile_o << std::noshowpos << endl<<endl;
 
 	/*for (auto it = CombVector.begin(); it < CombVector.end(); it++)
 	{
@@ -343,6 +374,8 @@ void CombLock::DataStruture_CLHN_Only()
 		myfile_o << endl;
 		cout << endl;
 	}
+	myfile_o << endl;
+	cout << endl;
 }
 
 void CombLock::DecodeROOT()

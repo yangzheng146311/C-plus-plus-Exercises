@@ -55,7 +55,7 @@ public:
 	static void Initialise();
 	static bool Build_SafeLock();
 	static void TimesLimitVaildOutput(int times);
-	static void StopUntilOutputOneVaild(int soluNum);
+	static void StopUntilOutputEnoughVaild(int soluNum);
 	static void ReadKeyFile(string filename,string output_filename);
 	static void WriteKeyFile(string filename);
 	
