@@ -183,60 +183,41 @@ void CombLock::ReadKeyFile(string filename)
 	CombLock::myfile_f.open(filename);
 	string str;
 	int index_space=-1;
+	char buff_c;
+	string buff_s;
 	while (!CombLock::myfile_f.eof())
 
 	{
-		
-			getline(CombLock::myfile_f, str);
-			if (str.length() > 0)
+	  getline(CombLock::myfile_f, str);
+	   if (str.length() > 0)
 			{
-				vector<string> v = String_Split(str, ' ');
-				vector<string> v1 = String_Split(v[1], ',');
-				for (int i = 0; i < 4; i++)
+			    vector<string> v = String_Split(str, ' ');
+			
+				if (v[0] == "ROOT")
 				{
-					if (v[0] == "ROOT")
+					for (int i=0;i<4;i++)
 					{
+						buff_c = v[1][i];
+						ROOT[i]= atoi(&buff_c);
 						
-						ROOT[i]= atoi(&v[1][i]);
-						
-						cout << ROOT[i];
-
-					}
-
-					/*if (v[0] == "UHF")
-					{
-
-						ROOT[i] = atoi(&v[1][i]);
-						cout << UHF[i];
-					}
-
-					if (v[0] == "LHF")
-					{
-						ROOT[i] = atoi(&v[1][i]);
-						cout << LHF[i];
-					}
-
-					if (v[0] == "PHF")
-					{
-
-						ROOT[i] = atoi(&v[1][i]);
-						cout << PHF[i];
-					}*/
-
+					}		
 				}
-				
+				else
+				{
+			     vector<string> v1 = String_Split(v[1], ',');
+				 for (int i = 0; i < 4; i++)
+				 {
 
-
-
-
-				
-				
-				cout << endl;
-			}
-		
-		
+					 if (v[0] == "UHF") UHF[i] = stoi(v1[i]);
+					 if (v[0] == "LHF") LHF[i] = stoi(v1[i]);
+					 if (v[0] == "PHF") PHF[i] = stoi(v1[i]); 
+				 }
+				}					
+		}
 	}
+
 	CombLock::myfile_f.close();
+	DecodeROOT();
 }
 
 void CombLock::WriteKeyFile(string filename)
@@ -323,6 +304,53 @@ void CombLock::DataStruture()
 	}
 
 	myfile_o << endl;*/
+}
+
+void CombLock::DataStruture_CLHN_Only()
+{
+	for (auto it = CombVector.begin(); it < CombVector.end(); it++)
+	{
+		//myfile_o << "CN" << it->id << " ";
+		cout<< "CN" << it->id << " ";
+		for (int i = 0; i < 4; i++)
+		{
+			//myfile_o << it->CN[i];
+			cout << it->CN[i];
+		}
+		//myfile_o << ",";
+		cout << ",";
+
+		//myfile_o << "LN" << it->id << " ";
+		cout<< "LN" << it->id << " ";
+		for (int i = 0; i < 4; i++)
+		{
+			//myfile_o << it->LN[i];
+			cout<< it->LN[i];
+		}
+		//myfile_o << ",";
+		cout<< ",";
+
+		//myfile_o << "HN" << it->id << " ";
+		cout << "HN" << it->id << " ";
+		for (int i = 0; i < 4; i++)
+		{
+			//myfile_o << it->HN[i];
+			cout << it->HN[i];
+		}
+		//myfile_o << endl;
+		cout << endl;
+	}
+}
+
+void CombLock::DecodeROOT()
+{
+	CombLock c1; CombVector[0] = c1;
+	CombLock c2(c1); CombVector[1] = c2;
+	CombLock c3(c2); CombVector[2] = c3;
+	CombLock c4(c3); CombVector[3] = c4;
+	CombLock c5(c4); CombVector[4] = c5;
+
+	DataStruture_CLHN_Only();
 }
 
 vector<string> CombLock::String_Split(const string& s, const char& c)

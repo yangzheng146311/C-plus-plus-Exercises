@@ -36,6 +36,8 @@ private:
 	static bool CheckAllCN();//Check if all the combination locks satisfy the rule
 	static bool CheckEven();//Check 
 	static void DataStruture();
+	static void DataStruture_CLHN_Only();
+	static void DecodeROOT();
 	static vector<string> String_Split(const string& s, const char& c);
 	
 
