@@ -178,13 +178,12 @@ void CombLock::StopUntilOutputOneVaild(int soluNum)
 
 }
 
-void CombLock::ReadKeyFile(string filename)
+void CombLock::ReadKeyFile(string filename,string output_filename)
 {
 	CombLock::myfile_f.open(filename);
+	CombLock::myfile_o.open(output_filename, std::ofstream::out);
 	string str;
-	int index_space=-1;
 	char buff_c;
-	string buff_s;
 	while (!CombLock::myfile_f.eof())
 
 	{
@@ -218,6 +217,8 @@ void CombLock::ReadKeyFile(string filename)
 
 	CombLock::myfile_f.close();
 	DecodeROOT();
+	CombLock::myfile_o.close();
+
 }
 
 void CombLock::WriteKeyFile(string filename)
@@ -308,36 +309,38 @@ void CombLock::DataStruture()
 
 void CombLock::DataStruture_CLHN_Only()
 {
+
+
 	for (auto it = CombVector.begin(); it < CombVector.end(); it++)
 	{
-		//myfile_o << "CN" << it->id << " ";
+		myfile_o << "CN" << it->id << " ";
 		cout<< "CN" << it->id << " ";
 		for (int i = 0; i < 4; i++)
 		{
-			//myfile_o << it->CN[i];
+			myfile_o << it->CN[i];
 			cout << it->CN[i];
 		}
-		//myfile_o << ",";
+		myfile_o << ",";
 		cout << ",";
 
-		//myfile_o << "LN" << it->id << " ";
+		myfile_o << "LN" << it->id << " ";
 		cout<< "LN" << it->id << " ";
 		for (int i = 0; i < 4; i++)
 		{
-			//myfile_o << it->LN[i];
+			myfile_o << it->LN[i];
 			cout<< it->LN[i];
 		}
-		//myfile_o << ",";
+		myfile_o << ",";
 		cout<< ",";
 
-		//myfile_o << "HN" << it->id << " ";
+		myfile_o << "HN" << it->id << " ";
 		cout << "HN" << it->id << " ";
 		for (int i = 0; i < 4; i++)
 		{
-			//myfile_o << it->HN[i];
+			myfile_o << it->HN[i];
 			cout << it->HN[i];
 		}
-		//myfile_o << endl;
+		myfile_o << endl;
 		cout << endl;
 	}
 }
