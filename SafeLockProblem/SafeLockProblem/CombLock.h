@@ -35,9 +35,11 @@ private:
 	static bool CheckSum();//Check each digit in a CN is same or not
 	static bool CheckAllCN();//Check if all the combination locks satisfy the rule
 	static bool CheckEven();//Check 
-	static void DataStruture();
+	static void DataStruture_Key_Only();
 	static void DataStruture_CLHN_Only(string check_result);
-	static void DecodeROOT();
+	static void DataStruture_LN_Only();
+	static void Generate_MultiSafeFile();
+	static void Generate_LockedSafeFile();
 	static vector<string> String_Split(const string& s, const char& c);
 	
 

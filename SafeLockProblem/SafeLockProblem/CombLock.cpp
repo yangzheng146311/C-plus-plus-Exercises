@@ -132,7 +132,7 @@ bool CombLock::Build_SafeLock()
 	if (!CheckSum())    return false;
 	if (!CheckEven())   return false;
 
-	DataStruture();
+	DataStruture_Key_Only();
 	
 	return true;
 }
@@ -183,6 +183,10 @@ void CombLock::ReadKeyFile(string filename,string output_filename)
 	string str;
 	char buff_c;
 	bool ifoutput = false;
+	int op = -1;
+	cout << "Press '1' for multi_safe_file" << endl;
+	cout << "Press '2' for locked_file" << endl;
+	std::cin >> op;
 	while (!CombLock::myfile_f.eof())
 
 	{
@@ -216,7 +220,14 @@ void CombLock::ReadKeyFile(string filename,string output_filename)
 	   else
 		   if (ifoutput == false)
 		   {
-			   DecodeROOT();
+			   switch (op)
+			   {
+			   case 1:Generate_MultiSafeFile(); break;
+			   case 2:Generate_LockedSafeFile(); break;
+			   default:
+				   break;
+			   }
+
 			   ifoutput = true;
 		   }
 
@@ -265,7 +276,7 @@ void CombLock::WriteKeyFile(string filename)
 
 }
 
-void CombLock::DataStruture()
+void CombLock::DataStruture_Key_Only()
 {
 	myfile_o << "ROOT ";
 	for (int i = 0; i < 4; i++)
@@ -379,22 +390,64 @@ void CombLock::DataStruture_CLHN_Only(string check_result)
 	//cout << endl;
 }
 
-void CombLock::DecodeROOT()
+void CombLock::DataStruture_LN_Only()
+{
+	
+	myfile_o << "ROOT: ";
+	for (int i = 0; i < 4; i++)
+	{
+		myfile_o << ROOT[i] << " ";;
+	}
+	myfile_o << endl;
+
+	for (auto it = CombVector.begin(); it < CombVector.end(); it++)
+	{
+		myfile_o << "LN" << it->id << ": ";
+		
+		for (int i = 0; i < 4; i++)
+		{
+			myfile_o << it->LN[i]<<" ";
+			
+		}
+		myfile_o << "\n";
+		
+	}
+	myfile_o << endl;
+	
+}
+
+void CombLock::Generate_MultiSafeFile()
 {
 	string check_result = "";
+	int op = -1;
 	CombLock c1; CombVector[0] = c1;
 	CombLock c2(c1); CombVector[1] = c2;
 	CombLock c3(c2); CombVector[2] = c3;
 	CombLock c4(c3); CombVector[3] = c4;
 	CombLock c5(c4); CombVector[4] = c5;
 
-	if (!CheckAllCN() || !CheckSum() || !CheckEven())  check_result = "NOT VALID";
-	else	check_result = "VALID";
-	
-
 	DataStruture_CLHN_Only(check_result);
+
+
+	
+	
 }
 
+void CombLock::Generate_LockedSafeFile()
+{
+	string check_result = "";
+	int op = -1;
+	CombLock c1; CombVector[0] = c1;
+	CombLock c2(c1); CombVector[1] = c2;
+	CombLock c3(c2); CombVector[2] = c3;
+	CombLock c4(c3); CombVector[3] = c4;
+	CombLock c5(c4); CombVector[4] = c5;
+
+	DataStruture_LN_Only();
+
+
+
+}
 vector<string> CombLock::String_Split(const string& s, const char& c)
 {
 	string buff = "";
