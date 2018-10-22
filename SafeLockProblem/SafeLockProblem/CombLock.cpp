@@ -463,6 +463,12 @@ int CombLock::CN_Sum()
 
 }
 
+int CombLock::CN_Number()
+{
+	return Generate_Number(CN);
+
+}
+
 int CombLock::LN_Sum()
 {
 	int sum = 0;
@@ -523,7 +529,7 @@ bool CombLock::CheckEven()
 	int sum = 0;
 	for (auto it = CombVector.begin(); it < CombVector.end(); it++)
 	{
-		sum += it->CLHN_Sum();
+		sum += it->CN_Number();
 	}
 	//myfile_o << "sum ="<<sum << endl;
 	if (sum % 2 != 0) return false;

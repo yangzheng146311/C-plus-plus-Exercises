@@ -52,6 +52,7 @@ public:
 	int  LN_Sum();
 	int  HN_Sum();
 	int  CLHN_Sum();
+	int  CN_Number();
 	static void Initialise();
 	static bool Build_SafeLock();
 	static void TimesLimitVaildOutput(int times);
