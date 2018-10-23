@@ -9,7 +9,9 @@ int CombLock::ROOT[4] = { 0,0,0,0 };
 int CombLock::UHF[4] = { 0,0,0,0 };
 int CombLock::LHF[4] = { 0,0,0,0 };
 int CombLock::PHF[4] = { 0,0,0,0 };
-
+int  CombLock::CN_Temp[5][4] = { {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}};
+int  CombLock::LN_Temp[5][4] = { {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}};
+int  CombLock::HN_Temp[5][4] = { {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}};
 //First Lock Constructor
 CombLock::CombLock()
 {
@@ -55,6 +57,17 @@ CombLock::CombLock(const CombLock &comblock)
 
 }
 
+CombLock::CombLock(int id,int CN[], int LN[], int HN[])
+{
+	this->id = id;
+	for (int i = 0; i < 4; i++)
+	{
+		this->CN[i] = CN[i];
+		this->LN[i] = LN[i];
+		this->HN[i] = HN[i];
+	}
+}
+
 CombLock::~CombLock() {
 }
 
@@ -65,6 +78,13 @@ void CombLock::Initialise()
 	CombLock::Generate_LHF();
 	CombLock::Generate_PHF();
 	
+}
+
+int CombLock::Temp_Turn(int x, int y)
+{
+	if (x + y < 0) return x + y + 10;
+	if (x + y > 9) return x + y - 10;
+	return x + y;
 }
 
 void CombLock::Generate_ROOT()
@@ -113,6 +133,38 @@ void CombLock::Generate_PHF()
 		
 	}
 	
+}
+
+void CombLock::Calculate_PHF()
+{
+	int temp = 0;
+	//cout << "PHF:";
+	for (int i = 0; i < 4; i++)
+	{
+
+		temp = (LN_Temp[1][i] - 2 * LN_Temp[0][i] + ROOT[i]);
+		if (temp >=10) temp -= 10;
+		if (temp <= -10) temp += 10;
+		PHF[i] = temp;
+		//cout <<PHF[i]<<endl;
+	}
+	//cout << endl;
+}
+
+void CombLock::Calculate_LHF()
+{
+	int temp = 0;
+	//cout << "LHF:";
+	for (int i = 0; i < 4; i++)
+	{
+
+		temp = (LN_Temp[0][i]-ROOT[i]-UHF[i]);
+		if (temp >= 10) temp -= 10;
+		if (temp <= -10) temp += 10;
+		LHF[i] = temp;
+		//cout << PHF[i] << endl;
+	}
+	//cout << endl;
 }
 
 bool CombLock::Build_SafeLock()
@@ -300,6 +352,113 @@ void CombLock::WriteKeyFile(string filename)
 
 }
 
+void CombLock::ReadLockedSafeFile(string filename, string output_filename)
+{
+	CombLock::myfile_f.open(filename);
+	CombLock::myfile_o.open(output_filename, std::ofstream::out);
+	string str;
+	string buff_s;
+	bool ifoutput = false;
+	vector<string> v;
+	int time = 1;//run times
+	while (!CombLock::myfile_f.eof())
+
+	{
+		getline(CombLock::myfile_f, str);
+
+		//Read LN0-LN5 from txt 
+		if (str.length() > 0)
+		{
+			ifoutput = false;
+			v = String_Split(str, ' ');
+
+			if (v[0] == "ROOT:")
+			{
+				for (int i = 1; i <= 4; i++)
+				{
+					buff_s = v[i];
+					ROOT[i-1] = stoi(buff_s);
+
+				}
+			}
+			if (v[0] == "LN0:")
+			{
+				for (int i = 1; i <= 4; i++)
+				{
+					buff_s = v[i];
+					LN_Temp[0][i-1] = stoi(buff_s);
+
+				}
+			}
+			if (v[0] == "LN1:")
+			{
+				for (int i = 1; i <= 4; i++)
+				{
+					buff_s = v[i];
+					LN_Temp[1][i-1] = stoi(buff_s);
+
+				}
+			}
+			if (v[0] == "LN2:")
+			{
+				for (int i = 1; i <= 4; i++)
+				{
+					buff_s = v[i];
+					LN_Temp[2][i-1] = stoi(buff_s);
+
+				}
+			}
+			if (v[0] == "LN3:")
+			{
+				for (int i = 1; i <= 4; i++)
+				{
+					buff_s = v[i];
+					LN_Temp[3][i-1] = stoi(buff_s);
+
+				}
+			}
+			if (v[0] == "LN4:")
+			{
+				for (int i = 1; i <= 4; i++)
+				{
+					buff_s = v[i];
+					LN_Temp[4][i-1] = stoi(buff_s);
+
+				}
+			}
+		}
+		else
+			if (ifoutput == false)
+			{
+				//Calculate the PHF by formula
+				Calculate_PHF();
+				//calculate the HN0-HN5
+				for (int i = 0; i < 5; i++)
+				{
+					for (int j = 0; j < 4; j++)
+					{
+						HN_Temp[i][j] = Temp_Turn(LN_Temp[i][j], PHF[j]);
+					}
+					cout << endl;
+				}
+				while (!Generate_OriginKeyfile())
+				{
+
+					cout << "This is " << time << " times" << endl;
+					time++;
+				}
+				
+				ifoutput = true;
+			}
+
+	}
+
+	CombLock::myfile_f.close();
+	CombLock::myfile_o.close();
+
+	
+}
+
 void CombLock::DataStruture_Key_Only()
 {
 	myfile_o << "ROOT ";
@@ -478,6 +637,53 @@ void CombLock::Generate_LockedSafeFile()
 
 
 
+}
+
+bool CombLock::Generate_OriginKeyfile()
+{
+	
+	//Generate the UHF randomly to try
+	CombLock::Generate_UHF();
+	//calculate the CN0-CN5
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			CN_Temp[i][j] = Temp_Turn(CN_Temp[i][j], UHF[j]);
+		}
+		
+	}
+
+	CombLock c1(0, CN_Temp[0], LN_Temp[0], HN_Temp[0]); CombVector[0] = c1;
+	CombLock c2(1, CN_Temp[1], LN_Temp[1], HN_Temp[1]); CombVector[1] = c2;
+	CombLock c3(2, CN_Temp[2], LN_Temp[2], HN_Temp[2]); CombVector[2] = c3;
+	CombLock c4(3, CN_Temp[3], LN_Temp[3], HN_Temp[3]); CombVector[3] = c4;
+	CombLock c5(4, CN_Temp[4], LN_Temp[4], HN_Temp[4]); CombVector[4] = c5;
+	
+
+	if (!CheckAllCN())  return false;
+	if (!CheckSum())    return false;
+	if (!CheckEven())   return false;
+
+	//When UHF is proved to right,then Calculate the LHF and output it
+	Calculate_LHF();
+
+
+	DataStruture_Key_Only();
+
+	
+	return true;
+
+
+
+
+
+
+	
+
+
+
+	
 }
 
 vector<string> CombLock::String_Split(const string& s, const char& c)
