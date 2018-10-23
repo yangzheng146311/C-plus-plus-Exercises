@@ -61,6 +61,9 @@ CombLock::~CombLock() {
 void CombLock::Initialise()
 {
 	srand(time(0));
+	CombLock::Generate_UHF();
+	CombLock::Generate_LHF();
+	CombLock::Generate_PHF();
 	
 }
 
@@ -116,9 +119,7 @@ bool CombLock::Build_SafeLock()
 {
 	
 	CombLock::Generate_ROOT();
-	CombLock::Generate_UHF();
-	CombLock::Generate_LHF();
-	CombLock::Generate_PHF();
+	
 
 	CombLock c1; CombVector[0] = c1;
 	CombLock c2(c1); CombVector[1] = c2;
@@ -126,13 +127,13 @@ bool CombLock::Build_SafeLock()
 	CombLock c4(c3); CombVector[3] = c4;
 	CombLock c5(c4); CombVector[4] = c5;
 
-	
+	DataStruture_Key_Only();
 	
 	if (!CheckAllCN())  return false;
 	if (!CheckSum())    return false;
 	if (!CheckEven())   return false;
 
-	DataStruture_Key_Only();
+	//DataStruture_Key_Only();
 	
 	return true;
 }
@@ -161,6 +162,7 @@ void CombLock::TimesLimitVaildOutput(int times)
 void CombLock::StopUntilOutputEnoughVaild(int soluNum)
 {
 	int i = 0;
+	CombLock::myfile_o << "NS " << soluNum << endl;
 	for (int t=1; t <=soluNum; t++)
 	{
 		
@@ -426,6 +428,13 @@ void CombLock::Generate_MultiSafeFile()
 	CombLock c4(c3); CombVector[3] = c4;
 	CombLock c5(c4); CombVector[4] = c5;
 
+	if (!CheckAllCN() || !CheckEven() || !CheckSum())
+		check_result = "NOT VALID";
+	else
+	{
+		check_result = "VALID";
+	}
+
 	DataStruture_CLHN_Only(check_result);
 
 
@@ -448,6 +457,7 @@ void CombLock::Generate_LockedSafeFile()
 
 
 }
+
 vector<string> CombLock::String_Split(const string& s, const char& c)
 {
 	string buff = "";

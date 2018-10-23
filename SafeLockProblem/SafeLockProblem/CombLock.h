@@ -32,9 +32,9 @@ private:
 	static void Generate_UHF();
 	static void Generate_LHF();
 	static void Generate_PHF();
-	static bool CheckSum();//Check each digit in a CN is same or not
+	static bool CheckSum();//Check if each digit in a CN is same or not
 	static bool CheckAllCN();//Check if all the combination locks satisfy the rule
-	static bool CheckEven();//Check 
+	static bool CheckEven();//Check if the Sum of all CN is even
 	static void DataStruture_Key_Only();
 	static void DataStruture_CLHN_Only(string check_result);
 	static void DataStruture_LN_Only();
