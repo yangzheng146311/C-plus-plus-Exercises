@@ -127,18 +127,18 @@ bool CombLock::Build_SafeLock()
 	CombLock c4(c3); CombVector[3] = c4;
 	CombLock c5(c4); CombVector[4] = c5;
 
-	DataStruture_Key_Only();
+
+	
 	
 	if (!CheckAllCN())  return false;
 	if (!CheckSum())    return false;
 	if (!CheckEven())   return false;
-
-	//DataStruture_Key_Only();
+	DataStruture_Key_Only();
 	
 	return true;
 }
 
-void CombLock::TimesLimitVaildOutput(int times)
+bool CombLock::TimesLimitVaildOutput(int times)
 {
 	bool ifFound = false;
 	for (int i = 1; i <= times; i++)
@@ -149,29 +149,41 @@ void CombLock::TimesLimitVaildOutput(int times)
 			//CombLock::myfile_o << "This is the " << i << "times" << std::endl;
 		}
 		else
+		{
 			ifFound = true;
+			return ifFound;
+		}
 	}
 	if (!ifFound)
 	{
-		std::cout << "Solution not found in " << times << "times" << std::endl;
-		CombLock::myfile_o << "Solution not found in " << times << " times" << std::endl;
+		//std::cout << "Solution not found in " << times << "times" << std::endl;
+		//CombLock::myfile_o << "Solution not found in " << times << " times" << std::endl;
+		return ifFound;
+		
 	}
 
 }
 
-void CombLock::StopUntilOutputEnoughVaild(int soluNum)
+void CombLock::StopUntilOutputEnoughVaild(int soluNum,int timeToChangeHash)
 {
 	int i = 0;
 	CombLock::myfile_o << "NS " << soluNum << endl;
 	for (int t=1; t <=soluNum; t++)
 	{
 		
-		while (!CombLock::Build_SafeLock())
-		{
+		//while (!CombLock::Build_SafeLock())
+		//{
 
-			i++;
-			std::cout << "This is the " << i << "  times" << std::endl;
-			//CombLock::myfile_o << "This is the " << i << " times" << std::endl;
+		//	i++;
+		//	std::cout << "This is the " << i << "  times" << std::endl;
+		//	//CombLock::myfile_o << "This is the " << i << " times" << std::endl;
+
+		//}
+		while (!CombLock::TimesLimitVaildOutput(timeToChangeHash))
+		{
+			CombLock::Generate_UHF();
+			CombLock::Generate_LHF();
+			CombLock::Generate_PHF();
 
 		}
 	}
@@ -246,6 +258,7 @@ void CombLock::WriteKeyFile(string filename)
 	int op = -1;
 	int times = -1;
 	int num = -1;
+	int timeToChangeHash = -1;
 	CombLock::Initialise();
 
 	CombLock::myfile_o.open(filename, std::ofstream::out);
@@ -262,14 +275,23 @@ void CombLock::WriteKeyFile(string filename)
 		
 		cout << "Please input the times limited:" << endl;
 		cin >> times;
-		CombLock::TimesLimitVaildOutput(times);
+		while (!CombLock::TimesLimitVaildOutput(times))
+		{
+			CombLock::Generate_UHF();
+			CombLock::Generate_LHF();
+			CombLock::Generate_PHF();
+
+		}
+		
 		break;
 
 	case 2:
 		
-		cout << "Please input referred number of keys" << endl;
+		cout << "Please input specific number of keys" << endl;
 		cin >> num;
-		CombLock::StopUntilOutputEnoughVaild(num);
+		cout << "Please input the specific time to change the Hash Function if enough solutions can not be found " << endl;
+		cin >> timeToChangeHash;
+		CombLock::StopUntilOutputEnoughVaild(num,timeToChangeHash);
 	default:
 		break;
 	}

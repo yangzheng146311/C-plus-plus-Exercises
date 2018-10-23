@@ -57,8 +57,8 @@ public:
 	int  CN_Number();
 	static void Initialise();
 	static bool Build_SafeLock();
-	static void TimesLimitVaildOutput(int times);
-	static void StopUntilOutputEnoughVaild(int soluNum);
+	static bool TimesLimitVaildOutput(int times);
+	static void StopUntilOutputEnoughVaild(int soluNum,int timeToChangeHash);
 	static void ReadKeyFile(string filename,string output_filename);
 	static void WriteKeyFile(string filename);
 	
