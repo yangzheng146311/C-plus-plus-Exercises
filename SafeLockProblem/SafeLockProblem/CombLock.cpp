@@ -1,6 +1,4 @@
 #include "CombLock.h"
-
-
 //FILE CombLock::myfile_o = FILE("test.txt");
 ofstream CombLock::myfile_o = ofstream();
 ifstream CombLock::myfile_f = ifstream();
