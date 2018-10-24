@@ -8,6 +8,8 @@
 #include<vector>
 #include<string>
 
+#include<cmath>
+
 using namespace std;
 
 class CombLock
@@ -37,6 +39,7 @@ private:
 	static void Generate_UHF();//used to generate the UHF randomly
 	static void Generate_LHF();//used to generate the LHF randomly
 	static void Generate_PHF();//used to generate the PHF randomly
+	static bool Generate_CN();//used to generate CN1 and CN0 to make a sub to calculate UHF to decode for coursework2
 	static void Calculate_PHF();//used to calculate the PHF for coursework2
 	static void Calculate_LHF();//used to calculate the LHF for coursework2
 	static bool CheckSum();//check if the sum of each digit in a CN order from large to small  

@@ -133,6 +133,61 @@ void CombLock::Generate_PHF()
 	
 }
 
+bool CombLock::Generate_CN()
+{
+	int CN0_Num = 0;
+	int CN1_Num = 1;
+	//Genertate CN0 and CN1
+	for (int j = 0; j < 2; j++)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			CN_Temp[j][i] = rand() % 10;
+		}
+	}
+	
+	//Check CN0 and CN1 if each one contain different number
+	for (int k = 0; k < 2; k++)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = i + 1; j < 4; j++)
+			{
+				if (CN_Temp[k][i] == CN_Temp[k][j]) {
+					
+					return false;
+				}
+			}
+		}
+	}
+	
+	CN0_Num = CN_Temp[0][0] * 1000 + CN_Temp[0][1] * 100 + CN_Temp[0][2] * 10 + CN_Temp[0][3] * 1;
+	CN1_Num = CN_Temp[1][0] * 1000 + CN_Temp[1][1] * 100 + CN_Temp[1][2] * 10 + CN_Temp[1][3] * 1;
+
+	if (CN0_Num > CN1_Num) return false;
+
+	int UHF_1[4] = { 0,0,0,0 };
+	int UHF_2[4] = { 0,0,0,0 };
+
+	//comfirm UHF
+	for (int i = 0; i < 4; i++)
+	{
+
+		UHF_1[i] = CN_Temp[0][i] - ROOT[i];
+		UHF_2[i]= CN_Temp[1][i] - HN_Temp[0][i];
+
+		if (UHF_1[i] != UHF_2[i])
+		{
+			if (abs(UHF_1[i] - UHF_2[i]) != 10) return false;
+		}
+		UHF[i] = UHF_1[i];
+	}
+
+
+	return true;
+
+}
+
 void CombLock::Calculate_PHF()
 {
 	int temp = 0;
@@ -643,11 +698,20 @@ bool CombLock::Generate_OriginKeyfile()
 	//Generate the UHF randomly to try
 	CombLock::Generate_UHF();
 	//calculate the CN0-CN5
-	for (int i = 0; i < 5; i++)
+
+
+	for (int i = 0; i < 4; i++)
+	{
+		CN_Temp[0][i] = Temp_Turn(ROOT[i], UHF[i]);
+
+	}
+	
+
+	for (int i = 1; i < 5; i++)
 	{
 		for (int j = 0; j < 4; j++)
 		{
-			CN_Temp[i][j] = Temp_Turn(CN_Temp[i][j], UHF[j]);
+			CN_Temp[i][j] = Temp_Turn(HN_Temp[i][j], UHF[j]);
 		}
 		
 	}
@@ -659,31 +723,18 @@ bool CombLock::Generate_OriginKeyfile()
 	CombLock c5(4, CN_Temp[4], LN_Temp[4], HN_Temp[4]); CombVector[4] = c5;
 	
 
-
-	Calculate_LHF();
-
-	DataStruture_Key_Only();
-
-
 	if (!CheckAllCN())  return false;
 	if (!CheckSum())    return false;
 	if (!CheckEven())   return false;
 
+
 	//When UHF is proved to right,then Calculate the LHF and output it
-	
-	
+	Calculate_LHF();
+
+	DataStruture_Key_Only();
+
 	return true;
 
-
-
-
-
-
-	
-
-
-
-	
 }
 
 vector<string> CombLock::String_Split(const string& s, const char& c)
