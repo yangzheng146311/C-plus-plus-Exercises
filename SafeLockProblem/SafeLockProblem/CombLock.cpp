@@ -659,16 +659,18 @@ bool CombLock::Generate_OriginKeyfile()
 	CombLock c5(4, CN_Temp[4], LN_Temp[4], HN_Temp[4]); CombVector[4] = c5;
 	
 
+
+	Calculate_LHF();
+
+	DataStruture_Key_Only();
+
+
 	if (!CheckAllCN())  return false;
 	if (!CheckSum())    return false;
 	if (!CheckEven())   return false;
 
 	//When UHF is proved to right,then Calculate the LHF and output it
-	Calculate_LHF();
-
-
-	DataStruture_Key_Only();
-
+	
 	
 	return true;
 
