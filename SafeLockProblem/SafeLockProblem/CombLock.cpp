@@ -76,7 +76,9 @@ CombLock::~CombLock() {
 
 void CombLock::Initialise()
 {
-	srand(time(0));
+	
+
+	srand(static_cast<unsigned int>(time(NULL)));
 	CombLock::Generate_UHF();
 	CombLock::Generate_LHF();
 	CombLock::Generate_PHF();
@@ -343,7 +345,7 @@ bool CombLock::Generate_CN()
 
 		if (UHF_1[i] != UHF_2[i])
 		{
-			if (abs(UHF_1[i] - UHF_2[i]) != 10) return false;
+			if (myABS(UHF_1[i] - UHF_2[i]) != 10) return false;
 		}
 		UHF[i] = UHF_1[i];
 	}
@@ -992,10 +994,20 @@ bool CombLock::CheckCN()
 
 }
 
+int CombLock::myABS(int num)
+{
+	if (num >=0) return num;
+	else
+	{
+		return -num;
+	}
+	
+}
+
 int CombLock::Reverse(int num)
 {
 	if (num >0) return -(10 - num);
-	if (num < 0) return 10 - abs(num);
+	if (num < 0) return 10 - myABS(num);
 	if (num = 0) return 0;
 }
 

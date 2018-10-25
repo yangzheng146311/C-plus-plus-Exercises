@@ -37,6 +37,7 @@ private:
 	int Turn(int x, int y);//used to turn the lock digits from left to right or from right to left,parameter x is an original digit and parameter y is the direction and number that have to turn
 	int  Generate_Number(int num[]);//uesd to create a int number from an int array
 	bool CheckCN();//used to check if the CN of a lock contain same number of not
+	static int myABS(int num);
 	static int Reverse(int num);
 	static int Temp_Turn(int x, int y);//the static version of Turn()
 	static void Generate_ROOT();//used to generate the ROOT randomly
