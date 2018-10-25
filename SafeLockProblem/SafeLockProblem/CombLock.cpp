@@ -10,6 +10,11 @@ int CombLock::PHF[4] = { 0,0,0,0 };
 int  CombLock::CN_Temp[5][4] = { {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}};
 int  CombLock::LN_Temp[5][4] = { {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}};
 int  CombLock::HN_Temp[5][4] = { {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}};
+int  CombLock::UHF_POS[16][4] = { {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0},
+								  {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0},
+								  {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0},
+								  {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0} };
+                                  
 //First Lock Constructor
 CombLock::CombLock()
 {
@@ -104,8 +109,10 @@ void CombLock::Generate_UHF()
 	{
 
 		UHF[i] = rand() % 18 - 9;
+		
 	
 	}
+	
 
 }
 
@@ -133,6 +140,164 @@ void CombLock::Generate_PHF()
 	
 }
 
+void CombLock::Generate_UHF_POS()
+{
+	int n = 0;//0-16 
+	//Initialize
+	for (int a = 0; a < 16; a++)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			UHF_POS[a][i] = UHF[i];
+		}
+	}
+
+	//Reverse 0 digit result save in UHF_POS[0]
+	for (int i = 0; i < 4; i++)
+	{
+
+		UHF_POS[n][4] = UHF[i];
+	}
+	n++;
+
+	//Reverse 1 digit result save in UHF_POS[1-4]
+	for (int a = 0; a < 4; a++)
+	{
+		//reverse 1 digit one time from left to right temporaryly
+		int r = Reverse(UHF[a]);
+		UHF[a] = r;
+
+		for (int i = 0; i < 4; i++)
+		{
+
+			UHF_POS[n][i] = UHF[i];
+
+		}
+		n++;
+		UHF[a] = Reverse(r);
+		//UHF is static,so I have to reverse it back
+
+	}
+
+	//Reverse 2 digit result save in UHF_POS[5-10]
+	for (int a = 0; a < 4; a++)
+	{
+		for (int b = 1; b <= 3 - a; b++)
+		{
+			//reverse 2 digit one time from left to right temporaryly
+			int r = Reverse(UHF[a]);
+			int r2 = Reverse(UHF[a + b]);
+			UHF[a] = r;
+			UHF[a + b] = r2;
+
+			for (int i = 0; i < 4; i++)
+			{
+
+				UHF_POS[n][i] = UHF[i];
+			}
+			n++;
+			//UHF is static,so I have to reverse it back
+			UHF[a] = Reverse(r);
+			UHF[a + b] = Reverse(r2);
+		}
+
+	}
+
+	//Reverse 3 digit result save in UHF_POS[10-14]
+	for (int a = 0; a < 4; a++)
+	{
+		int d1, d2, d3;
+		int r, r2, r3;
+		if (a == 0)
+		{
+
+			d1 = a + 1; d2 = a + 2; d3 = a + 3;
+			//reverse 3 digit one time 
+			r = Reverse(UHF[d1]);
+			r2 = Reverse(UHF[d2]);
+			r3 = Reverse(UHF[d3]);
+			UHF[d1] = r;
+			UHF[d2] = r2;
+			UHF[d3] = r3;
+		}
+
+		if (a == 1)
+		{
+
+			d1 = a - 1; d2 = a + 1; d3 = a + 2;
+			//reverse 3 digit one time 
+			r = Reverse(UHF[d1]);
+			r2 = Reverse(UHF[d2]);
+			r3 = Reverse(UHF[d3]);
+			UHF[d1] = r;
+			UHF[d2] = r2;
+			UHF[d3] = r3;
+		}
+
+		if (a == 2)
+		{
+
+			d1 = a - 2; d2 = a - 1; d3 = a + 1;
+			//reverse 3 digit one time 
+			r = Reverse(UHF[d1]);
+			r2 = Reverse(UHF[d2]);
+			r3 = Reverse(UHF[d3]);
+			UHF[d1] = r;
+			UHF[d2] = r2;
+			UHF[d3] = r3;
+		}
+
+		if (a == 3)
+		{
+
+			d1 = a - 3; d2 = a - 2; d3 = a - 1;
+			//reverse 3 digit one time 
+			r = Reverse(UHF[d1]);
+			r2 = Reverse(UHF[d2]);
+			r3 = Reverse(UHF[d3]);
+			UHF[d1] = r;
+			UHF[d2] = r2;
+			UHF[d3] = r3;
+		}
+
+		for (int i = 0; i < 4; i++)
+		{
+
+			UHF_POS[n][i] = UHF[i];
+		}
+		n++;
+		//UHF is static,so I have to reverse it back
+		UHF[d1] = Reverse(r);
+		UHF[d2] = Reverse(r2);
+		UHF[d3] = Reverse(r3);
+	}
+
+	//Reverse 4 digit result save in UHF_POS[15]
+	for (int i = 0; i < 4; i++)
+	{
+		
+		
+		UHF_POS[n][i] = Reverse(UHF[i]);
+		
+
+	}
+
+	//CHECK Print
+	/*for (int i = 0; i < 16; i++)
+	{
+		
+		for (int j = 0; j < 4; j++)
+		{
+			
+			cout << showpos << UHF_POS[i][j] << " ";
+
+		}
+		cout << endl;
+	}*/
+	
+	
+}
+	
 bool CombLock::Generate_CN()
 {
 	int CN0_Num = 0;
@@ -198,6 +363,7 @@ void CombLock::Calculate_PHF()
 		temp = (LN_Temp[1][i] - 2 * LN_Temp[0][i] + ROOT[i]);
 		if (temp >=10) temp -= 10;
 		if (temp <= -10) temp += 10;
+		
 		PHF[i] = temp;
 		//cout <<PHF[i]<<endl;
 	}
@@ -243,9 +409,9 @@ bool CombLock::Build_SafeLock()
 	return true;
 }
 
-bool CombLock::TimesLimitVaildOutput(int times)
+int CombLock::TimesLimitVaildOutput(int times)
 {
-	bool ifFound = false;
+	int countFound = 0;
 	for (int i = 1; i <= times; i++)
 	{
 		if (!CombLock::Build_SafeLock())
@@ -255,18 +421,12 @@ bool CombLock::TimesLimitVaildOutput(int times)
 		}
 		else
 		{
-			ifFound = true;
-			return ifFound;
+			countFound++;
+			
 		}
 	}
-	if (!ifFound)
-	{
-		//std::cout << "Solution not found in " << times << "times" << std::endl;
-		//CombLock::myfile_o << "Solution not found in " << times << " times" << std::endl;
-		return ifFound;
-		
-	}
-
+	
+	return countFound;
 }
 
 void CombLock::StopUntilOutputEnoughVaild(int soluNum,int timeToChangeHash)
@@ -497,8 +657,8 @@ void CombLock::ReadLockedSafeFile(string filename, string output_filename)
 				while (!Generate_OriginKeyfile())
 				{
 
-					cout << "This is " << time << " times" << endl;
-					time++;
+					/*cout << "This is " << time << " times" << endl;
+					time++;*/
 				}
 				
 				ifoutput = true;
@@ -697,42 +857,56 @@ bool CombLock::Generate_OriginKeyfile()
 	
 	//Generate the UHF randomly to try
 	CombLock::Generate_UHF();
-	//calculate the CN0-CN5
-
-
-	for (int i = 0; i < 4; i++)
-	{
-		CN_Temp[0][i] = Temp_Turn(ROOT[i], UHF[i]);
-
-	}
+	CombLock::Generate_UHF_POS();
 	
 
-	for (int i = 1; i < 5; i++)
+	
+	for (int t = 0; t < 16; t++)
 	{
-		for (int j = 0; j < 4; j++)
+		//repalce the UHF to enum 16 situations
+		for (int i = 0; i < 4; i++)
 		{
-			CN_Temp[i][j] = Temp_Turn(HN_Temp[i][j], UHF[j]);
+
+			UHF[i] = UHF_POS[t][i];
+
 		}
-		
+
+	//calculate the CN0-CN5
+		for (int i = 0; i < 4; i++)
+		{
+			CN_Temp[0][i] = Temp_Turn(ROOT[i], UHF[i]);
+
+		}
+
+
+		for (int i = 1; i < 5; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				CN_Temp[i][j] = Temp_Turn(HN_Temp[i][j], UHF[j]);
+			}
+
+		}
+
+		CombLock c1(0, CN_Temp[0], LN_Temp[0], HN_Temp[0]); CombVector[0] = c1;
+		CombLock c2(1, CN_Temp[1], LN_Temp[1], HN_Temp[1]); CombVector[1] = c2;
+		CombLock c3(2, CN_Temp[2], LN_Temp[2], HN_Temp[2]); CombVector[2] = c3;
+		CombLock c4(3, CN_Temp[3], LN_Temp[3], HN_Temp[3]); CombVector[3] = c4;
+		CombLock c5(4, CN_Temp[4], LN_Temp[4], HN_Temp[4]); CombVector[4] = c5;
+
+
+		if (!CheckAllCN())  //return false;
+		if (!CheckSum())   //return false;
+		if (!CheckEven())   //return false;
+
+
+		//When UHF is proved to right,then Calculate the LHF and output it
+
+		Calculate_LHF();
+
+		DataStruture_Key_Only();
 	}
-
-	CombLock c1(0, CN_Temp[0], LN_Temp[0], HN_Temp[0]); CombVector[0] = c1;
-	CombLock c2(1, CN_Temp[1], LN_Temp[1], HN_Temp[1]); CombVector[1] = c2;
-	CombLock c3(2, CN_Temp[2], LN_Temp[2], HN_Temp[2]); CombVector[2] = c3;
-	CombLock c4(3, CN_Temp[3], LN_Temp[3], HN_Temp[3]); CombVector[3] = c4;
-	CombLock c5(4, CN_Temp[4], LN_Temp[4], HN_Temp[4]); CombVector[4] = c5;
-	
-
-	if (!CheckAllCN())  return false;
-	if (!CheckSum())    return false;
-	if (!CheckEven())   return false;
-
-
-	//When UHF is proved to right,then Calculate the LHF and output it
-	Calculate_LHF();
-
-	DataStruture_Key_Only();
-
+		
 	return true;
 
 }
@@ -792,6 +966,13 @@ bool CombLock::CheckCN()
 
 
 
+}
+
+int CombLock::Reverse(int num)
+{
+	if (num >0) return -(10 - num);
+	if (num < 0) return 10 - abs(num);
+	if (num = 0) return 0;
 }
 
 int CombLock::CN_Sum()
